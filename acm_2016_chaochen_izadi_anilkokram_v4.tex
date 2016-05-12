@@ -152,9 +152,9 @@ Assessing the perceptual quality of videos is critical for monitoring and optimi
 \section{Introduction}
 During video acquisition, compression and communication, various types of distortion may be introduced. Among them, noise is typically introduced in the acquisition process, and it may propagate throughout the video processing and communication pipeline. Accurately predicting the impact of noise on perceptual quality helps in optimizing the overall efficiency of video services. For example, using the estimated noise level, we may be able to predict the likelihood of severe blocking in a subsequent transcoding operation\cite{AlMer1999}. We can then select a suitable pre-processor to reduce the knock-on effects both on bitrate and quality.
 
-The best way of assessing video quality is to collect human scores by conducting subjective tests. However, human studies are labor intensive and not applicable to real-time applications. It is, therefore, appealing to devise an algorithm that can accurately predict perceptual quality. Perceptual image and video quality prediction have been extensively studied, and several high-performance metrics have been invented. For image quality prediction, SSIM\cite{SSIM} achieves very high correlation with perception and has been widely used due to its low complexity. For video quality prediction, MOVIE\cite{MOVIE} and STMAD\cite{STMAD} report the best accuracy. 
+The best way of assessing video quality is to collect human scores by conducting subjective tests. However, human studies are labor intensive and not applicable to real-time applications. It is, therefore, appealing to devise an algorithm that can accurately predict perceptual quality. Perceptual image and video quality prediction have been extensively studied, and several high-performance metrics have been invented. For image quality prediction, SSIM (Structural SIMilarity index \cite{SSIM}) achieves very high correlation with perception and has been widely used due to its low complexity. For video quality prediction, MOVIE (MOtion-based Video Integrity Evaluation index \cite{MOVIE}) and STMAD (Spatial-Temporal Most Apparent Distortion \cite{STMAD}) report the best accuracy. 
 
-A common drawback of these high-performance metrics is that they need a pristine example of the video clip under test. In practice, for instance in quality assessment of YouTube uploads, such a reference is unavailable. This limitation motivated research on no-reference image/video quality metrics. One approach to this problem is to measure the ``unnaturalness" of a picture or a video. It has been found that certain statistics of a pristine image/video follow certain models\cite{SriLeeSimZhu2003}\cite{ZorWei2009}. Quality can then be evaluated by measuring the deviation of these statistics from the models. The image quality metrics proposed by \cite{NIQE}, \cite{DIIVINE}, \cite{HNR} and video quality metrics proposed by \cite{BLIINDS} and \cite{ZhuLiAsaSau2015} follow this methodology. Another method of no-reference quality prediction is based on the free-energy principle in brain science\cite{Fri2010}. In this theory, when a visual signal is perceived, the human brain tries to infer the signal using an internal generative model. The free energy of this inference process, i.e., the discrepancy between the visual signal and the inference of the internal generative model thus can be used to quantify the level of distortion. The algorithms proposed in \cite{LiuZhaZhaSunGuYan2014} and \cite{ZhaWuYanLinZha2012} follow this method to predict image quality.
+A common drawback of these high-performance metrics is that they need a pristine reference of the video clip under test. In practice, for instance in quality assessment of YouTube uploads, such a reference is unavailable. This limitation motivated research on no-reference image/video quality metrics. One approach to this problem is to measure the ``unnaturalness" of a picture or a video. It has been found that certain statistics of a pristine image/video follow certain models\cite{SriLeeSimZhu2003} \cite{ZorWei2009}. Quality can then be evaluated by measuring the deviation of these statistics from the models. The image quality metrics proposed by \cite{NIQE}, \cite{DIIVINE}, \cite{HNR} and video quality metrics proposed by \cite{BLIINDS} and \cite{ZhuLiAsaSau2015} follow this methodology. Another method of no-reference quality prediction is based on the free-energy principle in brain science \cite{Fri2010}. In this theory, when a visual signal is perceived, the human brain tries to infer the signal using an internal generative model. The free energy of this inference process, i.e., the discrepancy between the visual signal and the inference of the internal generative model thus can be used to quantify the level of distortion. The algorithms proposed in \cite{LiuZhaZhaSunGuYan2014} and \cite{ZhaWuYanLinZha2012} follow this method to predict image quality.
 
 Besides the aforementioned general-purpose quality metrics, several algorithms are specifically designed for noise \cite{LimPar2014,ZhaKauWanYan2013,ZhaWu2011}. These algorithms, along with the general-purpose algorithms are designed or tuned for predicting the videos distorted by white noise. However, the noise on neighboring pixels is typically correlated. As demonstrated in \cite{SeyKeiKnoSte2013}, the demosaicing operation in video acquisition is performed over neighboring pixels and thus introduces correlation. We verified this in the videos uploaded to YouTube and found that the noise all presents some degree of correlations (see section \ref{sec:noise_analysis} for more details).
 
@@ -170,10 +170,10 @@ Since the number of sample videos in a subjective test session is limited, they 
 Every type of video capture pipeline may present different noise statistics. Hence, there exist many different noise structures in practical videos. YouTube is a video-sharing platform with an enormous amount of consumer-generated video contents. We collect 46,000 videos uploaded to YouTube to analyze their noise patterns. These videos are selected such that
 \begin{itemize}[leftmargin=*]
 \setlength\itemsep{-0.2em}
-\item They represent varying contents e.g. sports, movies, nature, music video, etc. 
-\item They are captured with over 200 different types of cameras or device models.
-\item They represent varying resolutions including 360p, 720p, 1080p, 2K and 4K.
-\item Their length is longer than 30 seconds to focus on contents that have a chance of being watched. 
+\item they represent varying contents e.g. sports, movies, nature, music video, etc. 
+\item they are captured with over 200 different types of cameras or device models.
+\item they represent varying resolutions including 360p, 720p, 1080p, 2K and 4K.
+\item their length is longer than 30 seconds to focus on contents that have a chance of being watched. 
 \end{itemize}
 
 We analyze the noise patterns of the video collection with a 2D auto-regressive (AR) model. This model has been widely used to analyze noise structure and synthesize film grain \cite{DeStefano2006,ColRobWhi2004}. Denoting by $\mathsf{N}(x,y)$ the synthesised noise at position $(x,y)$, the AR model is:
@@ -182,7 +182,7 @@ We analyze the noise patterns of the video collection with a 2D auto-regressive 
 \mathsf{N}(x,y) = \sum\limits_{(i,j) \in \mathcal{S}_\Delta} {w_{i,j}.\mathsf{N}(x+i,y+j)}+\mathsf{G}^{\sigma}(x,y),
 \end{equation}
 where $\mathsf{G}^{\sigma}(x,y) \sim {\cal N}(0,\sigma^2)$ is
-a Guassian random variable with zero mean and variance $\sigma^2$. The set $\mathcal{S}_\Delta$ is the square neighborhood of $(0,0)$ with size $(2\Delta + 1)\times(2\Delta + 1)$. The noise at a pixel $(x,y)$ is modeled as the sum of a white noise sample and a weighted sum of the noise in its neighborhood. The weight assigned to the pixel at $(x+i,y+j)$ is the model parameter $w_{i,j}$. Note that this is a prediction equation and so $w_{i,j} = 0$ for the pixels succeeding to the center pixel in raster-scan order. In the following we denote by $\vect{w}$ the vector of weight parameters, i.e., $\vect{w} = \left(w_{i,j}: \forall (i,j)\in\mathcal{S}_\Delta\right)^\mathsf{T}$. The parameter $\sigma^2$ characterizes the power of noise. For a fixed $\vect{w}$, larger $\sigma^2$ leads to larger noise power.
+a Gaussian random variable with zero mean and variance $\sigma^2$. The set $\mathcal{S}_\Delta$ is the square neighborhood of $(0,0)$ with size $(2\Delta + 1)\times(2\Delta + 1)$. The noise at a pixel $(x,y)$ is modeled as the sum of a white noise sample and a weighted sum of the noise in its neighborhood. The weight assigned to the pixel at $(x+i,y+j)$ is the model parameter $w_{i,j}$. Note that this is a prediction equation and so $w_{i,j} = 0$ for the pixels succeeding to the center pixel in raster-scan order. In the following we denote by $\vect{w}$ the vector of weight parameters, i.e., $\vect{w} = \left(w_{i,j}: \forall (i,j)\in\mathcal{S}_\Delta\right)^\mathsf{T}$. The parameter $\sigma^2$ characterizes the power of noise. For a fixed $\vect{w}$, larger $\sigma^2$ leads to larger noise power.
 
 To analyze the structure of the noise in a video sequence we employ aspects of the noise estimation method proposed in \cite{KokKelDenCra2016}. That method estimates the Power Spectral Density of the noise in texture-less areas of video frames. This idea has been used in well-known post-production toolkits e.g. \href{http://www.thefoundry.co.uk}{NUKE} and Neat Video. The rationale of this method is that the noise is easier to separate in flat regions of a frame. The method first searches for flat patches from all the frames in a video and then applies hyper-planes to approximate the true values of the patches. The approximation error on the patch is considered as the noise. We applied this method on our video collections and fit the AR model to the separated noise to obtain minimum mean square error estimations for the model parameters $\vect{w}$ and $\sigma$. From this analysis, we have the following observations:
 \begin{enumerate}[leftmargin=*]
@@ -256,13 +256,13 @@ Sample frames of the video clips involved in the subjective test.
 \label{fig:sampleframe}
 \end{figure}
 
-We then employ the AR model \eqref{eq:ar_noise_model} to synthesize noise. We considered 3 models, $\mathbf{w}(0)$, $\mathbf{w}(0.5)$ and $\mathbf{w}(1)$, where $\mathbf{w}(\cdot)$ is defined in \eqref{eq:linear_pattern}. The noise synthesized using the three parameters thus present low, medium, and high noise correlations, respectively. For each noise pattern, we select 4 different $\sigma$ to create 4 test clips with different noise strength. We manually checked the 4 clips to make sure their perceptual quality is visually distinguishable and covers a wide range. In total, we created $3\times4=12$ distorted versions for each video. Because the duration of a test session is limited to be less than 30 minutes, 9 randomly sampled examples from each set of 12 clips were used for our subjective test. Thus, we used $6\times9=54$ clips in total.
+We then employ the AR model \eqref{eq:ar_noise_model} to synthesize noise. We considered 3 models, $\mathbf{w}(0)$, $\mathbf{w}(0.5)$ and $\mathbf{w}(1)$, where $\mathbf{w}(\cdot)$ is defined in \eqref{eq:linear_pattern}. The noise synthesized using the three parameters thus present low, medium, and high noise correlations, respectively. For each noise pattern, we select 4 different $\sigma$ to create 4 test clips with different noise strength. We manually checked the 4 clips to make sure their perceptual quality is visually distinguishable and covers a wide range. In total, we created $3\times4=12$ distorted versions for each video. Because the duration of a test session is limited to be less than 30 minutes, 9 randomly sampled examples from each set of 12 clips were used for our subjective test \cite{ITU}. Thus, we used $6\times9=54$ clips in total.
 \subsection{Subjective Experiment}
 \label{sec:subjective_study}
-We conducted a Double Stimulus Continuous Quality Scale (DSCQS) subjective test following the ITU guidelines\cite{ITU}. We use a 55 inch Samsung TV for our test, and the participants sit 2.0m away from the screen. 
-The screen of the 3840x2160 display was equally split into two parts. The original video and the noisy video were synchronously played in the two parts such that the subjects could view and compare the two clips easily. There were 28 subjects involved in the test. After each pair of clips had been played, the subject was asked to grade the test video using the original video as a reference.
+We conducted a Double Stimulus Continuous Quality Scale (DSCQS) subjective test following the ITU guidelines \cite{ITU}. We use a 55 inch Samsung TV for our test, and the participants sit 2.0 m away from the screen. 
+The screen of the 3840 x 2160 display was equally split into two parts. The original video and the noisy video were synchronously played in the two parts such that the subjects could view and compare the two clips easily. There were 28 subjects involved in the test. After each pair of clips had been played, the subject was asked to grade the test video using the original video as a reference.
 
-Fig.~\ref{fig:mos} shows the Mean Opinion Scores (MOS) obtained from the subjective test versus the power of the synthesized noise in each test video. The plot demonstrates that, as the power of noise increases, the perceptual quality tend to decrease. However, the noise power itself cannot provide a good prediction for MOS. The rank-order correlation between noise power and MOS is only 0.755.  
+Fig.~\ref{fig:mos} shows the Mean Opinion Scores (MOS) obtained from the subjective test versus the power of the synthesized noise in each test video. The plot demonstrates that, as the power of noise increases, the perceptual quality tend to decrease. However, the noise power itself cannot provide a good prediction for MOS. The rank-order correlation between noise power and MOS is only 0.755. 
 \begin{figure}[!hb]
 	\centering
 	\includegraphics[width=\columnwidth]{img/MOS.eps}
@@ -307,7 +307,7 @@ PSD captures the signal energy corresponding to spatial frequency $(2\pi\ell_x/B
 \label{eq:feature}
 \mathrm{r}(\ell_x,\ell_y,\ell_t)=\frac{\mathrm{S_{nn}}(\ell_x,\ell_y,\ell_t)}{\mathrm{S_{vv}}(\ell_x,\ell_y,\ell_t) + \alpha},
 \end{equation}
-where $\mathrm{S_{nn}}$ and $\mathrm{S_{vv}}$ are the PSDs for noise $\mathrm{n}(x,y,t)$ and video signal $\mathrm{v}(x,y,t)$, respectively. The constant $\alpha$ is a employed to stabilize potential numerical errors. The feature $\mathrm{r}(\ell_x,\ell_y,\ell_t)$ therefore gives the relative noise strength at a given spatial-temporal frequency.  
+where $\mathrm{S_{nn}}$ and $\mathrm{S_{vv}}$ are the PSDs for noise $\mathrm{n}(x,y,t)$ and video signal $\mathrm{v}(x,y,t)$, respectively. The constant $\alpha$ is employed to stabilize potential numerical errors. The feature $\mathrm{r}(\ell_x,\ell_y,\ell_t)$ therefore gives the relative noise strength at a given spatial-temporal frequency.  
 
 Another motivation for using $\mathrm{r}(\cdot)$ as the distortion feature is that it captures the correlation pattern of noise. In fact, it can be shown that the PSD of a signal equals to the Fourier transform of its auto-correlation function. The correlation pattern of noise is captured by $\mathrm{S_{nn}}$ and thus by $\mathrm{r}(\cdot)$. 
 
@@ -334,13 +334,13 @@ In our implementation, we fix the blocksize to be $B=32$ and the temporal length
 
 \begin{figure*}
 \subfigure[$\ell_t=0$]{
-\includegraphics[width=0.33\textwidth]{./img/corr_0_pub.eps}
-}
-\subfigure[$\ell_t=1$]{
 \includegraphics[width=0.33\textwidth]{./img/corr_1_pub.eps}
 }
-\subfigure[$\ell_t=2$]{
+\subfigure[$\ell_t=1$]{
 \includegraphics[width=0.33\textwidth]{./img/corr_2_pub.eps}
+}
+\subfigure[$\ell_t=2$]{
+\includegraphics[width=0.33\textwidth]{./img/corr_3_pub.eps}
 }
 \caption{\label{fig:correlation_map}The absolute value of the rank-order correlation coefficient between $\mathrm{d}(\ell_x,\ell_y,\ell_t)$ with the MOS obtained from the subjective test. The coefficients are rearranged such that $\ell_x=0,\ell_y=0$ is located at the center of image.}
 \end{figure*}
@@ -410,13 +410,12 @@ where the parameters $\Psi_{\ell_t}$ and $\Phi_{\ell_t}$ defines the pass-band f
 
 \section{Performance Evaluation}
 \label{sec:experiment}
-We evaluated the proposed metric on the videos tested in our subjective test. We employ the following polylog function to map our quality metric $D$ to the MOS. The fitted map is  
+We evaluated the proposed metric on the videos tested in our subjective test. We employ a simple linear model to map our quality metric $D$ to the MOS. The fitted model is  
 \begin{align*}
 \label{eq:mos_mapping}
-\mathrm{\hat{MOS}}(D) & = 2.5856\log^2(D) +23.3174\log(D) \\
-&- 551.4506D + 143.6105.
+\mathrm{\hat{MOS}}(D) & = -429.7171D + 90.9003.
 \end{align*}
-Our metric gives accurate predictions for perceptual quality. The linear correlation coefficient between the predicted MOS and the MOS is $0.9558$.
+Our metric gives accurate predictions for perceptual quality. The linear correlation coefficient and the rank order correlation coefficient between the predicted MOS and the MOS is $0.9490$ and $0.9518$, respectively.
 
 %\begin{figure}
 %\includegraphics[width=\columnwidth]{img/preMos_Mos.eps}
@@ -452,7 +451,7 @@ STMAD&0.7412&0.7533&72.8135\\
 }
 \end{table} 
 
-The parameters of our algorithm such as the numerical stabilizing constant $\alpha$ and visual importance pooling parameter $p$ are tuned using on our video database. To check if the database is large enough for training the algorithm parameters, we conducted cross-validations on our data base. Each time, we partition our database into a training set and a test set. We tune the parameters of our algorithm on the training set and evaluate the VoR on the test set. We vary the size of the training sets from 20\% to 90\% of the whole database. For a given training set size, cross-validations are repeated on 1000 random training/test set partitions and the average VoR is then calculated and shown in Fig.~\ref{fig:cross_validation}. It shows that the VoR decreases quickly as the size of training set increases. When the size of training set covers more than 60\% of the database, the average VoR does not decrease further. In other words, using 60\% of our database is enough for tuning the parameters of our model and the model parameter trained on our database is reliable. 
+The parameters of our algorithm such as the numerical stabilizing constant $\alpha$ and visual importance pooling parameter $p$ are tuned on our video database. To check if the database is large enough for training the algorithm parameters, we conducted cross-validations on our database. Each time, we partition our database into a training set and a test set. We tune the parameters of our algorithm on the training set and evaluate the VoR on the test set. We vary the size of the training sets from 20\% to 90\% of the whole database. For a given training set size, cross-validations are repeated on 1000 random training/test set partitions and the average VoR is then calculated and shown in Fig.~\ref{fig:cross_validation}. It shows that the VoR decreases quickly as the size of training set increases. When the size of training set covers more than 60\% of the database, the average VoR does not decrease further. In other words, using 60\% of our database is enough for tuning the parameters of our model and the model parameter trained on our database is reliable. 
 \begin{figure}
 \includegraphics[width=\columnwidth]{./img/cross_validation.eps}
 \caption{\label{fig:cross_validation} The variation of residuals (VoR) on the test set versus the size of the training set in cross validations.}
