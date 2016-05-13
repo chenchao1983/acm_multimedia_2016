@@ -1,0 +1,148 @@
+=======================
+Feedback to reviewer #1
+=======================
+
+1. Do you observe any content dependency in Fig 4? Also, there are different
+numbers of points for the different noise power values. Is that due to the
+random selection of distorted versions (9 out of 12) for each clip? Please
+clarify. Clusters of points can be observed in Fig. 8 for the VQM and STMAD
+metrics.  Is that due to content dependency? Please analyze. Could you also
+provide different color and pattern codes for the different clips?
+
+Thanks for the suggestions. In the revised version of the paper, we use
+different types of markers in Figure 4 and figure 8 to show the data points
+corresponding to different video contents. We can observe clear content
+dependency in the mean opinion scores. Noises are more visible for videos with
+low brightness (e.g. talkingman) than videos with bright scenes (e.g. snow). We
+also note that complex textures (e.g. beach) and dynamic scenes (e.g. goose)
+tend to mask noises.
+
+When we create the clips for each video, we did not try to have
+a uniform distribution over the spectrum of noise power. Instead, for each
+video, we manually select the now power such that the clips created for
+each video content covers the full range of perceptual noise level. We clarified
+this in the revised paper.
+
+2. You should also clarify how you obtained values for the metric parameters.
+You mention in Section 4 that you tuned the stabilizing constant alpha and the
+parameter p using your video database. But how did you obtain the parameter
+values psi and phi in Section 3.4? Also using the video database? Please
+clarify.
+
+Thanks for the question. The parameter psi and phi are also tuned using our
+database. We have added clarification in the revised paper as well.
+
+3. You should justify why you apply a double mapping between distortion D and
+MOS(D) and MOS(D) and MOSpred. I suppose that you obtained the mapping
+coefficients between D and MOS(D) using the subjective test results as target
+values. Then, you map MOS(D) to MOSpred again using the subjective test results.
+Why are you not directly mapping D to MOSpred? Also, with this double mapping
+using twice the subjective test results as target values you advantage your
+metric in comparison to the other metrics (PSNR, VQM, etc.). Please discuss this
+statement.
+
+Sorry for the confusion. We did not apply a double mapping as D -> MOS(D) ->
+MOS_pred. The polylog mapping from D -> MOS(D) is to give readers a simple
+non-linear mapping to predict MOS using our metric. The MOS_pred is directly
+derived from D using the nonlinear model given in equation (13).  It is not
+derived from MOS(D). MOS_pred is only used for the fair comparison with other
+metrics such as SSIM and STMAD because equation (13) is the standard model for
+metrics comparison. In the revised version, we clarified this point.
+
+Also, in the revised paper. We replaced our polylog nonlinear mapping with a
+linear mapping, which gives us much simpler mapping without sacrificing
+accuracy. The linear correlation achieved by the linear mapping is 0.9490.
+
+4. Generally speaking, you should mention that your metric is advantaged over
+the other metrics by being trained and validated on the same dataset. Of course,
+you provide cross-validation results as well, which makes the comparison between
+metrics a bit fairer. However, your database is homogeneous in terms of
+degradation (it contains spatially correlated noise degradation only). This
+prevents the metric to generate outliers during the cross-validation procedure.
+Also, for a fairer comparison with the other metrics, you should provide the
+same table as Table 1 when the metric is cross-validated using 60% of the
+database. In that case and since you are using 1000 random training/test
+partitions, you would provide the average SROCC, LCC and VoR values. Finally, I
+would be interested clusters of points in seeing performance results when
+conducting the cross-validation at content level, that is, when training on N-k
+clips and validating on k clips, where N is the number of clips (6) and with
+different values for k.
+
+Thanks for the comments. In the revised paper, we included a new table compares
+the performance of our metric with PSNR, SSIM, VQM and STMAD on test sets when
+60% of videos are used for training.
+
+We expect the algorithm to show worse performance in content-wise
+cross-validation because we designed our training set such that each video
+content presents different spatial-temporal characteristics from the others.
+Removing any content from training would make the training set much less
+representative and make the output of our metric biased. In this sense, our
+training set does not have redundant contents of similar spatial-temporal
+characteristics. Given the limited number of videos can be involved in a test,
+we must make our training set representative and compact.
+
+5. Finally, YouTube videos do not contain spatially correlated noise only but
+degradation such as blur or blockiness as well, even before video transmission.
+Do you plan to develop a metric which covers several types of degradation? If
+so, what are the next steps you plan to follow? Note that having such a metric
+covering various distortions would make the comparison with other metrics such
+as VQM even fairer since these metrics have been designed for covering various
+types of degradation and not a single one such as spatially correlated noise.
+Please comment.
+
+Thanks for asking. Aside from the noise metric, we have developed metrics for
+banding, blocking and blur artifacts. Our long term plan is to study how to
+combine those metrics for videos that present all these artifacts in the same
+time. In the revised paper, we added comments in the conclusion section.
+
+6. (Questions requires feedback) You are using ratio between P and I frame sizes
+and I frame sizes and maximum I frame size to characterize the spatial-temporal
+complexity of the contents. I would be curious to know a) why you are not using
+the commonly used Spatial and Temporal Information (SI and TI) values from ITU-T
+Rec. P.910 b) how you metrics correlate the SI and TI indicators.  Note that the
+reader may also be interested in such analysis, so please consider including it
+in the paper.
+
+An important motivation for us to use I/P frame size is that we have access to
+the encoding logs of YouTube transcoding service, which readily recorded the I
+frame size and P frame size for all the videos uploaded to YouTube. We agree
+that SI and TI would be a good choice, but I frame and P frame size also suffice
+for our purpose.
+
+7. Typos
+Thanks for pointing out the errors. We have fixed all of them and make another
+round of proofreading to make sure the paper is grammatical.
+
+=======================
+Feedback to Reviewer #2
+=======================
+1. My main critique is that the evaluated dataset has only applied noise as
+distortion, however other kinds of distortion, e.g. quantization and packet-loss
+are common. The authors show that their metric can predict user ratings based
+from noise quite well. However it is unknown how their algorithm performs in the
+presence of other factors. The compared algorithm are often tuned towards these
+parameters, thus the comparison seems a little bit unfair. These aspects should
+be better qualified, especially in the conclusion of the paper.
+
+Thank you for the comments. Our training set only involves noise. While we were
+developing this algorithm, we also created several metrics for blockiness,
+banding and blur. In the future, we will combine all these metrics and create a
+metric for the overall quality of videos suffering multiple types of
+distortions. In the revised paper, we clarified this point as our future work.
+
+2. In a minor note, in section 3.2, "On the other hand, for regions of higher
+than mid-grey luminance, the noise visibility decreases with luminance, which is
+also known as Weber’s law" This could be interpreted in a way that Weber's law
+is about luminance-noise relation specifically, while it is about relative
+stimulus intensity in general.  A small reformulation would clarify this.
+
+Thanks for pointing out this issue. We agree with your comments. In the revised
+paper, we replace "also known as Weber's law" with 'is due to Weber's law'.
+
+3. Section 2.2, end of second paragraph, "The sample frames of the six clips are
+shown in Fig. 3." Should probably read something like "Sample frames from six of
+the clips..."
+
+Thanks for the comment. We have fixed this in the revised paper.
+
+
