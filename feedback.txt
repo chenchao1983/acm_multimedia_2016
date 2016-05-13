@@ -146,3 +146,179 @@ the clips..."
 Thanks for the comment. We have fixed this in the revised paper.
 
 
+=======================
+Feedback to Reviewer #3
+=======================
+
+1. Only a deeper discussion of Figure 5 and a description of further necessary
+activities is missing in my opinion.  How did you define the architecture of
+proposed video metric (Figure 5)?
+
+Thanks for the suggestions. We added a detailed descriptions of Figure 5 and
+some discussion of our future work in the revised paper.
+
+2. Do you know from other trials (literature describing them) to build or define
+a no-reference model or metric?  Are there any plans for further proof of
+concept?
+
+Thanks for asking.  We note that VQEG is actively investigating a non-reference
+metric for IMAGE quality. They developed a new metric called VQEG Image Quality
+Evaluation Tool (VIQET). The metric is based on crawd sourcing image data. For
+no-reference VIDEO quality assessment, we don't know much about the recent
+advances except the references we cited in the paper.
+
+For further concept proof, we started to run our noise metric on 1% of YouTube
+videos to track the noise level. From these videos, we randomly selected a set
+of clips such that their MOS predicted by our metric is 30, 40, ..., 90.  We
+found that Their perceptual qualities agree well with the output of the proposed
+metric. We believe our metric is reliable and it will be very helpful for
+YouTube and other video service providers to optimize its denoising pipeline.
+Due to the limititation on the length of paper, we were not able to include
+these resutls. But we added some discussion in the conclusion of the paper.
+
+
+3. Section 1.: 2nd paragraph: Abbreviations SSIM, MOVIE, STMAD are not
+introduced or explained.
+
+In the revised version, we added the full names for these metrics to make it
+more readable.
+
+4. 3rd paragraph: Pristine... Do you mean reference or original material?
+
+Thanks for the question. In the revised version, we replace pristine with
+'reference' to make it clear.
+
+5. Section 2.1: No introduction of PSD although later used as abbreviation
+
+In the revised paper, we added the following reference to explain the concept of
+PSD.
+
+Alan V. Oppenheim, Ronald W. Schafer, and John R. Buck. 1999. Discrete-Time
+Signal Processing (2nd Ed.). Prentice-Hall, Inc., Upper Saddle River, NJ, USA.
+
+
+6. Section 2.2: 2nd paragraph: Why resize from 4K to 1080p? Earlier it is
+written that different resolutions are investigated.
+
+Thanks for the comment and sorry for the confusion. In our analysis of realistic
+noise, we investigated a comprehensive video set of 46000 videos, which involves
+all types of video resolutions.  In our subjective tests, we select 6 video
+contents from a set of 3226 high quality 4K videos uploaded to YouTube. Then we
+downsize the selected 4K video into 1080p using ffmpeg so that we can display
+the two 1080p videos side by side on our 4K screen. In the revised paper, we
+clarified this point for readers.
+
+7. How/Why did you define the values of block size and temporal lenght? Why T=3?
+
+The block size and temporal length is inherited from the PSD estimation
+algorithm in
+
+A. Kokaram, D. Kelly, H. Denman and A. Crawford, "Measuring noise correlation
+for improved video denoising," 2012 19th IEEE International Conference on Image
+Processing, Orlando, FL, 2012, pp. 1201-1204.
+
+We clarified this point in the revised paper.
+
+8. Other Typos
+Thanks for pointing out the typos. We have fixed them in the revised version of
+the paper.
+
+=======================
+Feedback to Reviewer #4
+=======================
+1. Why is video resized? How is it resized?
+
+Thanks for the comments. We selected our test clips from thousands of 4K videos
+with more than 100Mbps encoding bitrates. These videos are captured by high-end
+devices and have good quality. Then, we down-size the selected 4K video contents
+to 1080p format using ffmpeg scaling filter with the following command. The
+output is saved as yuv raw videos without re-encoding thus there is not quality
+degradation introduced in this process.
+
+We choose to use 1080p videos in our experiment for two reasons:
+1) Because we did a double-stimulus test, by resizing the video to 1080p, we can
+use one 4K screen to show two 1080p videos side by side to our subjects.
+2) 1080p is one of the most popular formats uploaded to YouTube.
+
+In the revised paper, we have made clarification on why/how we resized the
+videos.
+
+2.I would not refer to SSIM, MOVIE and STMAD as metrics for video quality
+prediction, but video quality assessment or video quality evaluation.  Page 2:
+"A subjective test is performed". Also in the following I would refer to "Test
+session" or "series of subjective tests" rather than just test.
+
+Thanks for the suggestions. We have revised the paper accordingly.
+
+
+3.Equation (1) presents an odd notation / definition: rather than to a Gaussian
+random field, it should refer to the realization of a random variable with
+Gaussian distribution. The notation in the second column is not correct (the
+symbol used means "for each" not "each").  More correct to say that \sigma_2
+characterizes the power of the noise (rather than \sigma).  It -> the
+method/algorithm
+
+Thanks for pointing out these errors. We have corrected them issues in our paper.
+
+
+4.The section could have reported an example with figures to illustrate the
+procedure.
+
+We are guessing that you are suggesting that we add some examples for the noise
+power spectrum density estimation procedure. We agree that it would greately
+improve the quality of the paper. However, due to the limitation on the length
+of the paper, we were not able to include more figures. Instead, we asked
+readers to refer to the following paper where several examplary figures are
+included there.
+
+A. Kokaram, D. Kelly, H. Denman and A. Crawford, "Measuring noise correlation
+for improved video denoising," 2012 19th IEEE International Conference on Image
+Processing, Orlando, FL, 2012, pp. 1201-1204.
+
+5. Pframe size / Iframe size as indicator of temporal complexity. Any reference /
+validation for this?
+
+Thanks for the comments. An important motivation for us to use I/P frame size is
+that we have access to the encoding logs of YouTube transcoding service, which
+readily recorded the I frame size and P frame size for all the videos uploaded
+to YouTube. In the revised paper, we added the following reference which
+justified the use of P/I frame size as spatial/temporal complexity.
+
+Chao Chen, Sasi Inguva, Andrew Rankin and Anil Kokaram, "A Subjective Study for
+the Design of Multi-resolution ABR Video Streams with the VP9 Codec", SPIE
+Electronic Imaging, Human Visual Perception, 2016
+
+6. Same QP to make frame size comparable - not true that same QP makes frame size
+comparable, but perhaps what the authors mean is that, if the same QP is used,
+the size of frames could be an indication of the complexity of the sequence
+(motion complexity / texture complexity).
+
+Thanks for the suggestions. We agree that same QP does not necessarily mean that the
+frame size is comparable. In the revised paper, we have removed this claim. The
+constant QP only makes frame size a better indicator of spatial-temporal
+complexity.
+
+7.Fitting is performed, but the metric is not tested on "unseen data" The
+"cross-validation" tests mentioned do not replace that.
+
+To further justify the performance of the proposed metric on "unseen data", we
+ran our noise metric on 1% of YouTube videos. From these videos, we randomly
+selected a set of clips such that their MOS predicted by our metric is 30, 40,
+..., 90.  We found that their perceptual qualities agree well with the output of
+the proposed metric. We believe our metric is reliable and it will be very
+helpful for video service providers such as YouTube to optimize their video
+processing pipelines.
+
+The results above is included in the revised paper.
+
+
+8.What is the difference between fig 8 and 9 apart from scale? I would omit either
+of them.
+
+Yes, we agree. We have removed figure 9.
+
+9.What described in the text as figure 4 is actually figure 10 (without caption).
+
+Thanks for pointing out this problem. We have addeed captions for figure 10 and
+corrected the reference to the figure.
+
